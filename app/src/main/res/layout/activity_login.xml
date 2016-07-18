@@ -1,16 +1,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
+              xmlns:ads="http://schemas.android.com/apk/res-auto"
               xmlns:card_view="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@android:color/darker_gray"
               android:gravity="center_horizontal"
               android:orientation="vertical"
               android:paddingBottom="@dimen/activity_vertical_margin"
               android:paddingLeft="@dimen/activity_horizontal_margin"
               android:paddingRight="@dimen/activity_horizontal_margin"
               android:paddingTop="@dimen/activity_vertical_margin"
-              android:background="@android:color/darker_gray"
               tools:context="com.xiaobailong24.smartrouter.LoginActivity">
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/login_adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id">
+    </com.google.android.gms.ads.AdView>
 
     <!-- Login progress -->
     <ProgressBar
@@ -33,12 +45,12 @@
             android:orientation="vertical">
 
             <android.support.v7.widget.CardView
-                android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                card_view:cardCornerRadius="16dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 card_view:cardBackgroundColor="@android:color/holo_blue_dark"
-                android:layout_marginBottom="@dimen/activity_vertical_margin">
+                card_view:cardCornerRadius="16dp">
 
                 <TextView
                     android:id="@+id/wifi_info_text"
@@ -77,8 +89,8 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:text="@string/action_sign_in"
-                android:textStyle="bold"
-                android:textSize="24sp"/>
+                android:textSize="24sp"
+                android:textStyle="bold"/>
 
         </LinearLayout>
     </ScrollView>

@@ -23,4 +23,6 @@
     <string name="mail_subject">智能路由器</string>
     <string name="share_text">智能路由器，设置路由器的简单安卓应用！</string>
     <string name="action_about">关于</string>
+    <string name="banner_ad_unit_id">ca-app-pub-4297495208842373/7679198848</string>
+    <string name="interstitial_unit_id">ca-app-pub-4297495208842373/6062864844</string>
 </resources>

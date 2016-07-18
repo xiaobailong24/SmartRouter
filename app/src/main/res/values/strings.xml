@@ -27,4 +27,8 @@
     <string name="mail_subject">SmartRouter</string>
     <string name="share_text">SmartRouter, easy Android app to setting router!</string>
 
+    <string name="banner_ad_unit_id">ca-app-pub-4297495208842373/7679198848</string>
+    <!--Replace with your own ad unit id. -->
+    <string name="interstitial_unit_id">ca-app-pub-4297495208842373/6062864844</string>
+
 </resources>

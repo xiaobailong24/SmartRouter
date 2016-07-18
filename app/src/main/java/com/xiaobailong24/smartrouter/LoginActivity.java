@@ -23,7 +23,12 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.xiaobailong24.smartrouter.Utils.WifiAdmin;
 
 import java.util.ArrayList;
@@ -55,6 +60,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private TextView mWifiInfo;
+    private AdView mAdView; //AdMob
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,24 +77,48 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         Log.e(TAG, "onCreate: wifiName-->" + wifiName);
         mWifiInfo.setText(getText(R.string.wifi_name) + wifiName);
 
+        // TODO: 2016/7/18  AdMob
+        // Initialize the Mobile Ads SDK.
+        mAdView = (AdView) findViewById(R.id.login_adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+        // Create the interstitial.
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.interstitial_unit_id));
+        // Create ad request.
+        AdRequest isAdRequest = new AdRequest.Builder().build();
+        // Begin loading your interstitial.
+        mInterstitialAd.loadAd(adRequest);
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                attemptLogin();
+            }
+        });
+
         Button mUrlSignInButton = (Button) findViewById(R.id.url_sign_in_button);
         mUrlSignInButton.setFocusable(true);    //获取焦点
         mUrlSignInButton.requestFocus();
         mUrlSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.e(TAG, "onClick: mUrlSignInButton -->");
                 boolean isValid = checkUrl(mUrlView.getText().toString());
                 if (!isValid) {
                     Snackbar.make(view, R.string.error_invalid_url, Snackbar.LENGTH_SHORT)
                             .setAction("Action", null).show();
                 } else {
-                    attemptLogin();
+                    mAdView.destroy();    //暂停AdMob
+                    showInterstitial();
                 }
             }
         });
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
     }
 
 
@@ -99,6 +130,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private void attemptLogin() {
         if (mAuthTask != null) {
             return;
+        }
+
+        // Request a new ad if one isn't already loaded, hide the button, and kick off the timer.
+        if (!mInterstitialAd.isLoaded()) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mInterstitialAd.loadAd(adRequest);
         }
 
         // Reset errors.
@@ -298,5 +335,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return matcher.matches();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAdView.resume();
+    }
+
+    private void showInterstitial() {
+        // Show the ad if it's ready. Otherwise toast and restart the game.
+        if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+            Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
+            attemptLogin();
+        }
+    }
 }
 
