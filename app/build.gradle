@@ -5,11 +5,11 @@ android {
     buildToolsVersion "24.0.0"
 
     defaultConfig {
-        applicationId "me.xiaobailong24.smartrouter"
+        applicationId "com.xiaobailong24.smartrouter"
         minSdkVersion 18
         targetSdkVersion 24
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 3
+        versionName "1.0.3"
     }
     buildTypes {
         release {
