@@ -15,6 +15,10 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        //https://github.com/javiersantos/AppUpdater
+        maven {
+            url "https://jitpack.io"
+        }
     }
 }
 
