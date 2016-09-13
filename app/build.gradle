@@ -1,15 +1,16 @@
 apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         applicationId "com.xiaobailong24.smartrouter"
-        minSdkVersion 18
+        minSdkVersion 16
         targetSdkVersion 24
-        versionCode 4
-        versionName "1.0.4"
+        versionCode 5
+        versionName "1.0.5"
     }
     buildTypes {
         release {
@@ -22,13 +23,22 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.0.0'
-    compile 'com.android.support:design:24.0.0'
-    compile 'com.android.support:cardview-v7:24.0.+'
+    compile 'com.android.support:appcompat-v7:24.+'
+    compile 'com.android.support:design:24.+'
+    compile 'com.android.support:cardview-v7:24.+'
     //AppUpdater
     compile 'com.github.javiersantos:AppUpdater:2.2'
     //AdMob
     compile 'com.google.android.gms:play-services:6.+'
+    //https://github.com/JakeWharton/butterknife
+    //http://jakewharton.github.io/butterknife/
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    //https://github.com/orhanobut/logger
+    compile 'com.orhanobut:logger:1.15'
+    //https://github.com/xiaobailong24/JitPack
+    compile 'com.github.xiaobailong24:JitPack:v1.0.4'
+
 }
 
 //task clean(type: Exec) {

@@ -23,18 +23,21 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+import com.orhanobut.logger.Logger;
 import com.xiaobailong24.smartrouter.Utils.WifiAdmin;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * A login screen that offers login via email/password.
@@ -45,7 +48,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     /**
      * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
@@ -56,39 +58,39 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private UserLoginTask mAuthTask = null;
 
     // UI references.
-    private AutoCompleteTextView mUrlView;
-    private View mProgressView;
-    private View mLoginFormView;
-    private TextView mWifiInfo;
-    private AdView mAdView; //AdMob
-    private InterstitialAd mInterstitialAd;
+    @BindView(R.id.url)
+    AutoCompleteTextView mUrlView;
+    @BindView(R.id.login_progress)
+    View mProgressView;
+    @BindView(R.id.login_form)
+    View mLoginFormView;
+    @BindView(R.id.wifi_info_text)
+    TextView mWifiInfo;
+    @BindView(R.id.login_adView)
+    AdView mAdView; //AdMob
+    InterstitialAd mInterstitialAd;
+    @BindView(R.id.url_sign_in_button)
+    Button mUrlSignInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Logger.d(TAG, "onCreate: ");
         setContentView(R.layout.activity_login);
-        // Set up the login form.
-        mUrlView = (AutoCompleteTextView) findViewById(R.id.url);
+        ButterKnife.bind(this);
 
         //WIFI
-        mWifiInfo = (TextView) findViewById(R.id.wifi_info_text);
         WifiAdmin wifiAdmin = new WifiAdmin(this);
         String wifiName = wifiAdmin.getSSID();
-        Log.e(TAG, "onCreate: wifiName-->" + wifiName);
         mWifiInfo.setText(getText(R.string.wifi_name) + wifiName);
 
-        // TODO: 2016/7/18  AdMob
         // Initialize the Mobile Ads SDK.
-        mAdView = (AdView) findViewById(R.id.login_adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
         // Create the interstitial.
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getString(R.string.interstitial_unit_id));
-        // Create ad request.
-        AdRequest isAdRequest = new AdRequest.Builder().build();
-        // Begin loading your interstitial.
         mInterstitialAd.loadAd(adRequest);
 
         mInterstitialAd.setAdListener(new AdListener() {
@@ -98,13 +100,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button mUrlSignInButton = (Button) findViewById(R.id.url_sign_in_button);
         mUrlSignInButton.setFocusable(true);    //获取焦点
         mUrlSignInButton.requestFocus();
         mUrlSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e(TAG, "onClick: mUrlSignInButton -->");
+                Logger.d(TAG, "onClick: mUrlSignInButton -->");
                 boolean isValid = checkUrl(mUrlView.getText().toString());
                 if (!isValid) {
                     Snackbar.make(view, R.string.error_invalid_url, Snackbar.LENGTH_SHORT)
@@ -116,17 +117,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-
     }
 
 
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
     private void attemptLogin() {
         if (mAuthTask != null) {
             return;
@@ -146,7 +139,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         boolean cancel = false;
         View focusView = null;
-
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(url)) {
@@ -291,13 +283,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             }
 
-            // TODO: 2016/7/7
             Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
             mainIntent.putExtra("URL", mUrl);
             Log.e(TAG, "mUrl: " + mUrl);
             startActivity(mainIntent);
 
-            // TODO: register the new account here.
             return true;
         }
 
@@ -346,7 +336,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
             mInterstitialAd.show();
         } else {
-            Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
             attemptLogin();
         }
     }

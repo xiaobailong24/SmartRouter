@@ -14,10 +14,9 @@
     tools:context="com.xiaobailong24.smartrouter.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <WebView
+    <me.xiaobailong24.library.View.AdvancedWebView
         android:id="@+id/login_web"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </WebView>
+        android:layout_height="match_parent"/>
 
 </android.support.v4.widget.SwipeRefreshLayout>
